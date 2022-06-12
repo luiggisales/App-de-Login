@@ -30,6 +30,7 @@ export function AuthProvider({children}){
             Alert.alert('Atenção',response.data.mensagem)
             if (response.data.data){
                 setUser(response.data.data)
+                api.defaults.headers.Authorization = `Bearer ${response.data.data.token}`;
                 await AsyncStorage.setItem('blob-token@user',JSON.stringify(response.data.data));
             }
         } catch (error) {
@@ -47,8 +48,9 @@ export function AuthProvider({children}){
             console.log(error)
         }   
     }
-    async function Logout(token){
+    async function Logout(){
         await AsyncStorage.removeItem('blob-token@user');
+        api.defaults.headers.Authorization = null;
         setUser(false)
     }
     return (
